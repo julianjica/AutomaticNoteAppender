@@ -37,7 +37,7 @@ for file in excel:
         packet = io.BytesIO()
         # Create a new PDF with Reportlab
         can = canvas.Canvas(packet, pagesize=letter)
-        can.setFont('Helvetica', 15.5)
+        can.setFont('Helvetica', 12.5)
         # Measurements are made in points (GIMP)
         # First Column: 330, Second Column: 370, Third Column: 410,
         # Fourth Column: 450
