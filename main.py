@@ -25,8 +25,9 @@ for file in os.listdir("Data/"):
         pdf.append(file)
 # Doing the operations for every file
 for file in excel:
+    print(file)
     data = pd.read_excel("Data/"+file)
-    data.dropna(how="all", axis=1, inplace=True)
+    data = data.iloc[:, :6]
     # Splitting PDF
     split_pdf("Data/"+file[:-5]+".pdf")
     shape = data.shape[0] - 60
@@ -42,11 +43,14 @@ for file in excel:
         # First Column: 330, Second Column: 370, Third Column: 410,
         # Fourth Column: 450
         # First level: 638, Distance between levels: 20
+        count = 2
         for jj in range(330, 451, 40):
-            count = 0
             for kk in range(0, shape[ii]):
-                can.drawString(jj, 628 - 18 * kk, "%1.2f"%data.iloc[30*ii+kk,
-                    -3 + count])
+                try:
+                    can.drawString(jj, 628 - 18 * kk, "%1.2f"%data.iloc[30*ii+kk,
+                        count])
+                except:
+                    print(data.iloc[30*ii+kk,-3 + count], 30*ii+kk,-3 + count)
             count += 1
         can.showPage()
         can.save()
