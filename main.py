@@ -30,11 +30,14 @@ for file in excel:
     data = data.iloc[:, :6]
     # Splitting PDF
     split_pdf("Data/"+file[:-5]+".pdf")
-    shape = data.shape[0] - 60
-    shape = [30, 30, shape]
+    N = int(data.shape[0] / 30.)
+    if N == data.shape[0] / 30.:
+        N = N - 1
+    shape = data.shape[0] - 30 * N
+    shape = [30] * N + [shape]
     
     # Writting in each splitting segment
-    for ii in range(0,3):
+    for ii in range(0,N + 1):
         packet = io.BytesIO()
         # Create a new PDF with Reportlab
         can = canvas.Canvas(packet, pagesize=letter)
@@ -50,6 +53,7 @@ for file in excel:
                     can.drawString(jj, 628 - 18 * kk, "%1.2f"%data.iloc[30*ii+kk,
                         count])
                 except:
+                    print(count)
                     print(data.iloc[30*ii+kk,-3 + count], 30*ii+kk,-3 + count)
             count += 1
         can.showPage()
@@ -72,7 +76,7 @@ for file in excel:
 
     # Merge results and save
     
-    pdfs = ["Data/ops/out_%s.pdf"%ii for ii in range(3)]
+    pdfs = ["Data/ops/out_%s.pdf"%ii for ii in range(N + 1)]
     merger = PdfFileMerger()
     for pdf in pdfs:
         merger.append(pdf)
@@ -80,7 +84,7 @@ for file in excel:
     merger.close()
 
     # Remove unparent files
-    for ii in range(0,3):
+    for ii in range(0,N + 1):
         os.remove("Data/ops/%s.pdf"%ii)
         os.remove("Data/ops/out_%s.pdf"%ii)
     
