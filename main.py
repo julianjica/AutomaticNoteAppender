@@ -50,8 +50,9 @@ for file in excel:
         for jj in range(330, 451, 40):
             for kk in range(0, shape[ii]):
                 try:
-                    can.drawString(jj, 628 - 18 * kk, "%1.2f"%data.iloc[30*ii+kk,
-                        count])
+                    value = "%1.2f"%data.iloc[30*ii+kk,count]
+                    value = "  " if value=="nan" else value
+                    can.drawString(jj, 628 - 18 * kk, value)
                 except:
                     print(count)
                     print(data.iloc[30*ii+kk,-3 + count], 30*ii+kk,-3 + count)
